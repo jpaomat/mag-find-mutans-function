@@ -1,0 +1,3 @@
+mode: set
+mag-find-mutants-function/main.go:19.49,25.2 2 0
+mag-find-mutants-function/main.go:31.13,33.2 1 0

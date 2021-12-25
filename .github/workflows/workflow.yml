@@ -4,7 +4,7 @@ on:
     branches: [main, feature/*]
 env:
   ### VARIABLES GENERALES ###
-  project_name: "mag-find-mutands-function"
+  project_name: "mag-find-mutants-function"
   team: "mag"
   language: "go"
   files_compress: "src node_modules index.js package.json package-lock.json"
@@ -49,4 +49,4 @@ jobs:
         run: |
           GOOS=linux go build -o dist/main
           zip -j deploy.zip ./dist/*
-          aws lambda update-function-code --function-name=mag-find-mutans-function --zip-file=fileb://deploy.zip
+          aws lambda update-function-code --function-name=${{env.project_name}} --zip-file=fileb://deploy.zip

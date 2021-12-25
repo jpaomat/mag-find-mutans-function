@@ -24,6 +24,10 @@ func Handler(request Request) (Response, error) {
 	}, nil
 }
 
+var (
+	start = lambda.Start
+)
+
 func main() {
-	lambda.Start(Handler)
+	start(Handler)
 }
