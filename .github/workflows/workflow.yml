@@ -6,9 +6,9 @@ env:
   ### VARIABLES GENERALES ###
   project_name: "mag-find-mutands-function"
   team: "mag"
-  language: "javascript"
+  language: "go"
   files_compress: "src node_modules index.js package.json package-lock.json"
-  handler: index.handler
+  handler: main
   memory: 128
 
 jobs:
