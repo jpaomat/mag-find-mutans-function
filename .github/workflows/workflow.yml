@@ -37,10 +37,38 @@ jobs:
         run: |
           mkdir coverage
           go test -coverprofile=cover.out
-          go tool cover -html=cover.out -o coverage.html
+          go tool cover -html=cover.out -o index.html
           mv cover.out coverage
-          mv coverage.html coverage
+          mv index.html coverage
       #   run: cd test && go test -v
+
+  sonarcloud:
+    runs-on: ubuntu-20.04
+    needs: [build]
+    name: SonarCloud
+    steps:
+      - uses: actions/checkout@v2
+      - name: Restore Data
+        uses: actions/download-artifact@v2
+        with:
+          name: coverage
+          path: coverage
+      - name: Current Branch
+        shell: bash
+        id: long-lived-branch
+        run: |
+          CURRENT_BRANCH=$(echo ${GITHUB_REF#refs/heads/})
+          if [ "$CURRENT_BRANCH" != "main" ] && [ "$CURRENT_BRANCH" != "staging" ] && [ "$CURRENT_BRANCH" != "qa" ]
+          then
+            CURRENT_BRANCH="qa"
+          fi
+          echo "##[set-output name=branch;]$(echo ${CURRENT_BRANCH})"
+          echo "Sonar Branch report => " ${CURRENT_BRANCH}
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@v1.3
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
   deploy-lambda:
     runs-on: ubuntu-latest
