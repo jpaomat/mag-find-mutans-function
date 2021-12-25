@@ -45,5 +45,8 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
-          repository: jpaomat/mag-find-mutans-function
-          tag_with_ref: true
+      - name: Deploy Lambda Function
+        run: |
+          GOOS=linux go build -o dist/main
+          zip -j deploy.zip ./dist/*
+          aws lambda update-function-code --function-name=mag-find-mutans-function --zip-file=fileb://deploy.zip
