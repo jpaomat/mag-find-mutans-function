@@ -19,10 +19,45 @@ jobs:
       - name: Setup Go
         uses: actions/setup-go@v2
         with:
-          go-version: '1.x'
+          go-version: "1.x"
       - name: Install dependencies
         run: |
           go version
           go get -u golang.org/x/lint/golint
       - name: Run build
         run: go build .
+      - name: Run vet & lint
+        run: |
+          go vet .
+          golint .
+      - name: Run testing
+        run: cd test && go test -v
+
+  deploy-lambda:
+    runs-on: ubuntu-latest
+    # if: github.ref == 'refs/heads/qa'
+    needs: [build]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Restore cache
+        uses: actions/cache@v2
+        env:
+          cache-name: nodejs-github-actions
+        with:
+          path: node_modules
+          key: npm-${{ env.cache-name }}-${{ hashFiles('**/package.json') }}-dev
+          restore-keys: npm-${{ env.cache-name }}
+      - uses: actions/setup-node@v2
+        with:
+          go-version: "1.x"
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+      - name: Deploy Lambda Function
+        run: |
+          npx ncc build index.ts
+          zip -j deploy.zip ./dist/*
+          aws lambda update-function-code --function-name=mag-stadistics-dna-processed-function --zip-file=fileb://deploy.zip
