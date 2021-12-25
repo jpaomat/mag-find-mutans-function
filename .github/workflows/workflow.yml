@@ -42,30 +42,43 @@ jobs:
           mv index.html coverage
       #   run: cd test && go test -v
 
+  # sonarcloud:
+  #   runs-on: ubuntu-20.04
+  #   needs: [build]
+  #   name: SonarCloud
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - name: Restore Data
+  #       uses: actions/download-artifact@v2
+  #       with:
+  #         name: coverage
+  #         path: coverage
+  #     - name: Current Branch
+  #       shell: bash
+  #       id: long-lived-branch
+  #       run: |
+  #         CURRENT_BRANCH=$(echo ${GITHUB_REF#refs/heads/})
+  #         if [ "$CURRENT_BRANCH" != "main" ] && [ "$CURRENT_BRANCH" != "staging" ] && [ "$CURRENT_BRANCH" != "qa" ]
+  #         then
+  #           CURRENT_BRANCH="qa"
+  #         fi
+  #         echo "##[set-output name=branch;]$(echo ${CURRENT_BRANCH})"
+  #         echo "Sonar Branch report => " ${CURRENT_BRANCH}
+  #     - name: SonarCloud Scan
+  #       uses: SonarSource/sonarcloud-github-action@v1.3
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+  #         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
   sonarcloud:
-    runs-on: ubuntu-20.04
-    needs: [build]
     name: SonarCloud
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Restore Data
-        uses: actions/download-artifact@v2
         with:
-          name: coverage
-          path: coverage
-      - name: Current Branch
-        shell: bash
-        id: long-lived-branch
-        run: |
-          CURRENT_BRANCH=$(echo ${GITHUB_REF#refs/heads/})
-          if [ "$CURRENT_BRANCH" != "main" ] && [ "$CURRENT_BRANCH" != "staging" ] && [ "$CURRENT_BRANCH" != "qa" ]
-          then
-            CURRENT_BRANCH="qa"
-          fi
-          echo "##[set-output name=branch;]$(echo ${CURRENT_BRANCH})"
-          echo "Sonar Branch report => " ${CURRENT_BRANCH}
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
       - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@v1.3
+        uses: SonarSource/sonarcloud-github-action@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
