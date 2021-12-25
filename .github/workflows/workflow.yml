@@ -7,7 +7,6 @@ env:
   project_name: "mag-find-mutants-function"
   team: "mag"
   language: "go"
-  files_compress: "src node_modules index.js package.json package-lock.json"
   handler: main
   memory: 128
 
@@ -45,7 +44,6 @@ jobs:
       - name: Run vet & lint
         run: |
           go vet .
-          golint .
 
   test-coverage:
     runs-on: ubuntu-latest
