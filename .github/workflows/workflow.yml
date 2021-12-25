@@ -35,11 +35,8 @@ jobs:
       # general reportes coverage: cover.out, cover.html
       # mover anteriores archivos a la carpeta coverage
         run: |
-          mkdir coverage
           go test -coverprofile=cover.out
           go tool cover -html=cover.out -o index.html
-          mv cover.out coverage
-          mv index.html coverage
       #   run: cd test && go test -v
 
   sonarcloud:
@@ -64,19 +61,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-
-  # sonarcloud:
-  #   name: SonarCloud
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #       with:
-  #         fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
-  #     - name: SonarCloud Scan
-  #       uses: SonarSource/sonarcloud-github-action@v1.3
-  #       env:
-  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
-  #         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
   deploy-lambda:
     runs-on: ubuntu-latest
