@@ -30,7 +30,16 @@ jobs:
         run: |
           go vet .
           golint .
-      # - name: Run testing
+      - name: Run testing
+      # crear carpeta coverage
+      # general reportes coverage: cover.out, cover.html
+      # mover anteriores archivos a la carpeta coverage
+        run: |
+          mkdir coverage
+          go test -coverprofile=cover.out
+          go tool cover -html=cover.out -o coverage.html
+          mv cover.out coverage
+          mv coverage.html coverage
       #   run: cd test && go test -v
 
   deploy-lambda:
