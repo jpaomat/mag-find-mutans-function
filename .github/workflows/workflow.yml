@@ -93,8 +93,8 @@ jobs:
 
   deploy-lambda:
     runs-on: ubuntu-latest
-    # if: github.ref == 'refs/heads/qa'
-    needs: [build]
+    if: github.ref == 'refs/heads/qa'
+    needs: [sonarcloud]
     steps:
       - uses: actions/checkout@v2
       - name: Configure AWS Credentials
