@@ -46,7 +46,5 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
       - name: Deploy Lambda Function
-        run: |
-          npx ncc build index.ts
-          zip -j deploy.zip ./dist/*
-          aws lambda update-function-code --function-name=mag-stadistics-dna-processed-function --zip-file=fileb://deploy.zip
+          repository: jpaomat/mag-find-mutans-function
+          tag_with_ref: true
