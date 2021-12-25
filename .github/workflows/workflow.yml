@@ -1,0 +1,28 @@
+name: PR-build-test-deploy
+on:
+  push:
+    branches: [main, feature/*]
+env:
+  ### VARIABLES GENERALES ###
+  project_name: "mag-find-mutands-function"
+  team: "mag"
+  language: "javascript"
+  files_compress: "src node_modules index.js package.json package-lock.json"
+  handler: index.handler
+  memory: 128
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: '1.x'
+      - name: Install dependencies
+        run: |
+          go version
+          go get -u golang.org/x/lint/golint
+      - name: Run build
+        run: go build .
