@@ -13,7 +13,7 @@ type Request struct {
 
 type Response struct {
 	Message string `json:"message"`
-	Ok      bool   `json:"ok`
+	Ok      bool   `json:"ok"`
 }
 
 func Handler(request Request) (Response, error) {
