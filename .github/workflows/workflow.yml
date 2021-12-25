@@ -4,7 +4,7 @@ on:
     branches: [main, feature/*]
 env:
   ### VARIABLES GENERALES ###
-  project_name: "mag-find-mutants-function"
+  project_name: "mag-stadistics-dna-processed-function"
   team: "mag"
   language: "go"
   handler: main
