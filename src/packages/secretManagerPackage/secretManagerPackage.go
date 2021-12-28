@@ -27,7 +27,8 @@ func (mySecretName Secret) GetSecretVal() {
 		Region: aws.String("us-east-1"),
 	}))
 	input := &secretsmanager.GetSecretValueInput{
-		SecretId: aws.String(secretName),
+		SecretId:     aws.String(secretName),
+		VersionStage: aws.String("AWSPREVIOUS"),
 	}
 
 	result, err := svc.GetSecretValue(input)
