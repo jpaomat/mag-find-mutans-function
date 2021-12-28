@@ -1,13 +1,15 @@
 package connectiondbpackage
 
 import (
-	"database/sql"
 	"encoding/json"
 	"fmt"
 
 	sm "mag-stadistics-dna-processed-function/src/packages/secretManagerPackage"
 
+	"database/sql"
+
 	"github.com/aws/aws-sdk-go/service/secretsmanager"
+	_ "github.com/go-sql-driver/mysql"
 )
 
 type SecretNameDb struct {
