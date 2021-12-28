@@ -34,7 +34,7 @@ func (secretNameDb SecretNameDb) GetConnectionDb() *sql.DB {
 	secretDataDb := getSecretDb.GetSecretVal()
 	credentialsDb := SecretManager(secretDataDb)
 	sqlConnection := fmt.Sprintf("%s:%s@%s/%s", credentialsDb.UserName, credentialsDb.Password, credentialsDb.Hostname, credentialsDb.Database)
-
+	fmt.Println("sqlConnection", sqlConnection)
 	db, err := sql.Open("mysql", sqlConnection)
 	// if there is an error opening the connection, handle it
 	if err != nil {
