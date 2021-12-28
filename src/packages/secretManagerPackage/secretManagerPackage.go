@@ -1,29 +1,27 @@
 package secretmanagerpackage
 
 import (
-	"encoding/json"
-
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/secretsmanager"
 )
 
-type Secret struct {
+type SecretName struct {
 	secretName string
 }
 
-func New(sn string) Secret {
-	mySecretName := Secret{secretName: sn}
+func New(sn string) SecretName {
+	mySecretName := SecretName{secretName: sn}
 	return mySecretName
 }
 
-type SecretData struct {
-	Hostname string  `json:"host"`
-	UserName string  `json:"username"`
-	Password string  `json:"password"`
-	Database string  `json:"dbInstanceIdentifier"`
-	Port     float64 `json:"port"`
-}
+// type SecretData struct {
+// 	Hostname string  `json:"host"`
+// 	UserName string  `json:"username"`
+// 	Password string  `json:"password"`
+// 	Database string  `json:"dbInstanceIdentifier"`
+// 	Port     float64 `json:"port"`
+// }
 
 var (
 	secretName   string = ""
@@ -31,7 +29,7 @@ var (
 	versionStage string = "AWSCURRENT"
 )
 
-func (mySecretName Secret) GetSecretVal() SecretData {
+func (mySecretName SecretName) GetSecretVal() *secretsmanager.GetSecretValueOutput {
 
 	secretName = mySecretName.secretName
 	svc := secretsmanager.New(
@@ -49,16 +47,17 @@ func (mySecretName Secret) GetSecretVal() SecretData {
 		panic(err.Error())
 	}
 
-	var secretString string
-	if result.SecretString != nil {
-		secretString = *result.SecretString
-	}
+	// var secretString string
+	// if result.SecretString != nil {
+	// 	secretString = *result.SecretString
+	// }
 
-	var secretData SecretData
-	err = json.Unmarshal([]byte(secretString), &secretData)
-	if err != nil {
-		panic(err.Error())
-	}
+	// var secretDatabase SecretData
+	// err = json.Unmarshal([]byte(secretString), &secretDatabase)
+	// if err != nil {
+	// 	panic(err.Error())
+	// }
 
-	return secretData
+	// return secretDatabase
+	return result
 }
