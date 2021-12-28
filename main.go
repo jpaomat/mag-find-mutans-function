@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	sm "mag-find-mutants-function/src/packages/secretManagerPackage"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
@@ -24,6 +25,8 @@ type PostInput struct {
 }
 
 func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+	mySecretName := sm.New("/rds_db/mysql")
+	mySecretName.GetSecretVal()
 	fmt.Printf("event.HTTPMethod %v |n", request.HTTPMethod)
 	fmt.Printf("event.Body %v |n", request.Body)
 	fmt.Printf("event.QueryStringParameters %v |n", request.QueryStringParameters)
