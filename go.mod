@@ -1,4 +1,4 @@
-module mag-find-mutants-function
+module mag-stadistics-dna-processed-function
 
 go 1.17
 

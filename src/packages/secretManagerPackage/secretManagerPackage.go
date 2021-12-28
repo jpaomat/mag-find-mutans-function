@@ -19,7 +19,7 @@ func New(sn string) Secret {
 	return mySecretName
 }
 
-func GetSecretVal(mySecretName Secret) {
+func (mySecretName Secret) GetSecretVal() {
 	// secretName := os.Getenv("/rds_db/mysql")
 	secretName := os.Getenv(mySecretName.secretName)
 	region := os.Getenv("us-east-1")
@@ -56,5 +56,5 @@ func GetSecretVal(mySecretName Secret) {
 		return
 	}
 
-	fmt.Println(result)
+	fmt.Println("Este es el contenido del secreto", result)
 }
