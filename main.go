@@ -19,7 +19,7 @@ type Response struct {
 func Handler(request Request) (Response, error) {
 	fmt.Println(request)
 	return Response{
-		Message: "Hola mundo",
+		Message: "Hola mundo!",
 		Ok:      true,
 	}, nil
 }
