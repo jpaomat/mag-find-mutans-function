@@ -22,10 +22,9 @@ func New(sn string) Secret {
 func (mySecretName Secret) GetSecretVal() {
 	// secretName := os.Getenv("/rds_db/mysql")
 	secretName := os.Getenv(mySecretName.secretName)
-	region := os.Getenv("us-east-1")
 
 	svc := secretsmanager.New(session.New(&aws.Config{
-		Region: &region,
+		Region: aws.String("us-east-1"),
 	}))
 	input := &secretsmanager.GetSecretValueInput{
 		SecretId: aws.String(secretName),
