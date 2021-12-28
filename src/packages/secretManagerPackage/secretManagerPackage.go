@@ -1,10 +1,9 @@
 package secretmanagerpackage
 
 import (
-	"fmt"
+	"encoding/json"
 
 	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/awserr"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/secretsmanager"
 )
@@ -18,11 +17,23 @@ func New(sn string) Secret {
 	return mySecretName
 }
 
-func (mySecretName Secret) GetSecretVal() {
-	secretName := mySecretName.secretName
-	region := "us-east-1"
-	versionStage := "AWSCURRENT"
+type SecretData struct {
+	Hostname string `json:"host"`
+	UserName string `json:"username"`
+	Password string `json:"password"`
+	Database string `json:"dbInstanceIdentifier"`
+	Port     string `json:"port"`
+}
 
+var (
+	secretName   string = ""
+	region       string = "us-east-1"
+	versionStage string = "AWSCURRENT"
+)
+
+func (mySecretName Secret) GetSecretVal() SecretData {
+
+	secretName = mySecretName.secretName
 	svc := secretsmanager.New(
 		session.New(),
 		aws.NewConfig().WithRegion(region),
@@ -35,28 +46,19 @@ func (mySecretName Secret) GetSecretVal() {
 
 	result, err := svc.GetSecretValue(input)
 	if err != nil {
-		if aerr, ok := err.(awserr.Error); ok {
-			switch aerr.Code() {
-			case secretsmanager.ErrCodeResourceNotFoundException:
-				fmt.Println(secretsmanager.ErrCodeResourceNotFoundException, aerr.Error())
-			case secretsmanager.ErrCodeInvalidParameterException:
-				fmt.Println(secretsmanager.ErrCodeInvalidParameterException, aerr.Error())
-			case secretsmanager.ErrCodeInvalidRequestException:
-				fmt.Println(secretsmanager.ErrCodeInvalidRequestException, aerr.Error())
-			case secretsmanager.ErrCodeDecryptionFailure:
-				fmt.Println(secretsmanager.ErrCodeDecryptionFailure, aerr.Error())
-			case secretsmanager.ErrCodeInternalServiceError:
-				fmt.Println(secretsmanager.ErrCodeInternalServiceError, aerr.Error())
-			default:
-				fmt.Println(aerr.Error())
-			}
-		} else {
-			// Print the error, cast err to awserr.Error to get the Code and
-			// Message from an error.
-			fmt.Println(err.Error())
-		}
-		return
+		panic(err.Error())
 	}
 
-	fmt.Println("Este es el contenido del secreto", result)
+	var secretString string
+	if result.SecretString != nil {
+		secretString = *result.SecretString
+	}
+
+	var secretData SecretData
+	err = json.Unmarshal([]byte(secretString), &secretData)
+	if err != nil {
+		panic(err.Error())
+	}
+
+	return secretData
 }

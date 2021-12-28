@@ -26,7 +26,7 @@ type PostInput struct {
 
 func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	mySecretName := sm.New("/rds_db/mysql")
-	mySecretName.GetSecretVal()
+	fmt.Println(mySecretName.GetSecretVal())
 	fmt.Printf("event.HTTPMethod %v |n", request.HTTPMethod)
 	fmt.Printf("event.Body %v |n", request.Body)
 	fmt.Printf("event.QueryStringParameters %v |n", request.QueryStringParameters)
