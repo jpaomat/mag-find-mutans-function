@@ -2,7 +2,6 @@ package secretmanagerpackage
 
 import (
 	"fmt"
-	"os"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awserr"
@@ -20,15 +19,18 @@ func New(sn string) Secret {
 }
 
 func (mySecretName Secret) GetSecretVal() {
-	// secretName := os.Getenv("/rds_db/mysql")
-	secretName := os.Getenv(mySecretName.secretName)
+	secretName := mySecretName.secretName
+	region := "us-east-1"
+	versionStage := "AWSCURRENT"
 
-	svc := secretsmanager.New(session.New(&aws.Config{
-		Region: aws.String("us-east-1"),
-	}))
+	svc := secretsmanager.New(
+		session.New(),
+		aws.NewConfig().WithRegion(region),
+	)
+
 	input := &secretsmanager.GetSecretValueInput{
 		SecretId:     aws.String(secretName),
-		VersionStage: aws.String("AWSPREVIOUS"),
+		VersionStage: aws.String(versionStage),
 	}
 
 	result, err := svc.GetSecretValue(input)
