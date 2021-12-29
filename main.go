@@ -28,11 +28,6 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 	stadisticsDna := stadistics.GetStadisticsDnaProcessed()
 	fmt.Println(stadisticsDna)
 
-	fmt.Printf("event.HTTPMethod %v |n", request.HTTPMethod)
-	fmt.Printf("event.Body %v |n", request.Body)
-	fmt.Printf("event.QueryStringParameters %v |n", request.QueryStringParameters)
-	fmt.Printf("event %v |n", request)
-
 	firstName := ""
 	lastName := ""
 

@@ -22,18 +22,18 @@ func NewValue(sn string) SecretNameDb {
 }
 
 type SecretData struct {
-	Hostname string  `json:"host"`
-	UserName string  `json:"username"`
-	Password string  `json:"password"`
-	Database string  `json:"dbInstanceIdentifier"`
-	Port     float64 `json:"port"`
+	Hostname string `json:"host"`
+	UserName string `json:"username"`
+	Password string `json:"password"`
+	Database string `json:"dbInstanceIdentifier"`
+	Port     int    `json:"port"`
 }
 
 func (secretNameDb SecretNameDb) GetConnectionDb() *sql.DB {
 	getSecretDb := sm.New(secretNameDb.secretName)
 	secretDataDb := getSecretDb.GetSecretVal()
 	credentialsDb := SecretManager(secretDataDb)
-	sqlConnection := fmt.Sprintf("%s:%s@tcp(%s:%f)/%s", credentialsDb.UserName, credentialsDb.Password, credentialsDb.Hostname, credentialsDb.Port, credentialsDb.Database)
+	sqlConnection := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s", credentialsDb.UserName, credentialsDb.Password, credentialsDb.Hostname, credentialsDb.Port, credentialsDb.Database)
 	fmt.Println("sqlConnection", sqlConnection)
 	db, err := sql.Open("mysql", sqlConnection)
 	// if there is an error opening the connection, handle it
@@ -42,6 +42,7 @@ func (secretNameDb SecretNameDb) GetConnectionDb() *sql.DB {
 	}
 	// defer the close till after the main function has finished
 	// executing
+
 	return db
 }
 

@@ -15,14 +15,6 @@ func New(sn string) SecretName {
 	return mySecretName
 }
 
-// type SecretData struct {
-// 	Hostname string  `json:"host"`
-// 	UserName string  `json:"username"`
-// 	Password string  `json:"password"`
-// 	Database string  `json:"dbInstanceIdentifier"`
-// 	Port     float64 `json:"port"`
-// }
-
 var (
 	secretName   string = ""
 	region       string = "us-east-1"
@@ -46,18 +38,5 @@ func (mySecretName SecretName) GetSecretVal() *secretsmanager.GetSecretValueOutp
 	if err != nil {
 		panic(err.Error())
 	}
-
-	// var secretString string
-	// if result.SecretString != nil {
-	// 	secretString = *result.SecretString
-	// }
-
-	// var secretDatabase SecretData
-	// err = json.Unmarshal([]byte(secretString), &secretDatabase)
-	// if err != nil {
-	// 	panic(err.Error())
-	// }
-
-	// return secretDatabase
 	return result
 }
