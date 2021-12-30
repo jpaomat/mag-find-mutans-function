@@ -2,6 +2,7 @@ package connections
 
 import (
 	"database/sql"
+	_ "github.com/go-sql-driver/mysql"
 	errormanager "mag-stadistics-dna-processed-function/src/config/errorManager"
 	"mag-stadistics-dna-processed-function/src/utils"
 	"net/http"
