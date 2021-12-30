@@ -5,7 +5,7 @@ import (
 	"log"
 
 	"mag-stadistics-dna-processed-function/src/config/response"
-	"mag-stadistics-dna-processed-function/src/routes"
+	stadistics "mag-stadistics-dna-processed-function/src/controllers/stadisticsController"
 
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/joho/godotenv"
@@ -25,7 +25,10 @@ func Handler(request Request) (*response.Response, error) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	routes.LoadRoutes()
+
+	resp := stadistics.GetStadisticsDnaProcessed()
+	fmt.Println(resp)
+	
 	return &response.Response{
 		Message:    "OK",
 		StatusCode: 200,
