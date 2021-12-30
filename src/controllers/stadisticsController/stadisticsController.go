@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"mag-stadistics-dna-processed-function/src/config/connections"
 	"mag-stadistics-dna-processed-function/src/config/constants"
-	"mag-stadistics-dna-processed-function/src/controllers/stadisticsController"
 )
 
 func GetStadisticsDnaProcessed() string {
