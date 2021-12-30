@@ -1,63 +1,41 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
-	stadistics "mag-stadistics-dna-processed-function/src/packages/getStadisticsDnaPackage"
+	"log"
 
-	"github.com/aws/aws-lambda-go/events"
+	"mag-stadistics-dna-processed-function/src/config/response"
+	"mag-stadistics-dna-processed-function/src/routes"
+
 	"github.com/aws/aws-lambda-go/lambda"
+	"github.com/joho/godotenv"
 )
 
 type Request struct {
-	ID    float64 `json:"id"`
-	Value string  `json:"value"`
-}
-
-type Response struct {
-	Message string `json:"message"`
-	Ok      bool   `json:"ok"`
-}
-
-type PostInput struct {
-	FirstName string `json:"firstName"`
-	LastName  string `json:"lastName"`
-}
-
-func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-	stadisticsDna := stadistics.GetStadisticsDnaProcessed()
-	fmt.Println(stadisticsDna)
-
-	firstName := ""
-	lastName := ""
-
-	if request.HTTPMethod == "GET" {
-		firstName = request.QueryStringParameters["firstName"]
-		lastName = request.QueryStringParameters["lastName"]
-	} else if request.HTTPMethod == "POST" {
-		postInput := &PostInput{}
-		json.Unmarshal([]byte(request.Body), postInput)
-		firstName = postInput.FirstName
-		lastName = postInput.LastName
-	}
-
-	body := fmt.Sprintf("{\"message\": \"Hello from lambda\", \"name\": \"%s %s\"}", firstName, lastName)
-
-	return events.APIGatewayProxyResponse{
-		Body:       body,
-		StatusCode: 200,
-		Headers: map[string]string{
-			"Content-Type":                 "application/json",
-			"Access-Control-Allow-Headers": "Content-Type",
-			"Access-Control-Allow-Origin":  "*",
-			"Access-Control-Allow-Methods": "OPTIONS,POST,GET",
-		},
-	}, nil
+	ID float64 `json:"id"`
 }
 
 var (
 	start = lambda.Start
 )
+
+func Handler(request Request) (*response.Response, error) {
+	fmt.Println(request)
+	err := godotenv.Load(".env")
+	if err != nil {
+		log.Fatal(err)
+	}
+	routes.LoadRoutes()
+	return &response.Response{
+		Message:    "OK",
+		StatusCode: 200,
+		Body: response.BodyStruct{
+			Count_mutant_dna: 0,
+			Count_human_dna:  0,
+			Ratio:            0,
+		},
+	}, nil
+}
 
 func main() {
 	start(Handler)
