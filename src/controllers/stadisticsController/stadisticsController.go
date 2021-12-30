@@ -6,6 +6,8 @@ import (
 	"mag-stadistics-dna-processed-function/src/config/connections"
 	"mag-stadistics-dna-processed-function/src/config/constants"
 	errormanager "mag-stadistics-dna-processed-function/src/config/errorManager"
+	"strconv"
+	"time"
 )
 
 type proProjectRepoImpl struct {
@@ -17,10 +19,18 @@ var (
 	buildMySQLConnection = connections.BuildMySQLConnection
 )
 
+var (
+	castToInt     = strconv.Atoi
+	parseDuration = time.ParseDuration
+)
+
 func GetStadisticsDnaProcessed() string {
 	// // clsConnectiob := db.NewValue("/rds_db/mysql")
 	// connectionString := constants.GetMysqlConnectionString()
 	connectionDb, errDto := loadConnection()
+	if errDto != nil {
+		panic(errDto)
+	}
 	defer connectionDb.Close()
 
 	resulSql, err := connectionDb.Query("SELECT * FROM mutants_general.DNA_VERIFICATION_MUTANTS")
@@ -35,11 +45,11 @@ func GetStadisticsDnaProcessed() string {
 }
 
 func loadConnection() (*sql.DB, *errormanager.ErrorManager) {
-	return connections.BuildMySQLConnection(
-		constants.GetMysqlConnectionString(),
-		constants.GetMaxOpenDbConn(),
-		constants.GetMaxOpenDbConn(),
-		constants.GetMaxOpenDbConn(),
-
-	).ConnectDBMysql()
+	connectionDb, errDto := connections.GetConnectDBMysql(
+			constants.GetMysqlConnectionString(),
+		)
+		if errDto != nil {
+			panic(errDto)
+		}
+	return connectionDb, errDto
 }
