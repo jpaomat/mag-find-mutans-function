@@ -32,6 +32,7 @@ func GetStadisticsDnaProcessed() string {
 		panic(errDto)
 	}
 	defer connectionDb.Close()
+	fmt.Println("connection DB", connectionDb)
 
 	resulSql, err := connectionDb.Query("SELECT * FROM mutants_general.DNA_VERIFICATION_MUTANTS")
 	// if there is an error inserting, handle it
@@ -45,6 +46,7 @@ func GetStadisticsDnaProcessed() string {
 }
 
 func loadConnection() (*sql.DB, *errormanager.ErrorManager) {
+	fmt.Println("loadconnection")
 	connectionDb, errDto := connections.GetConnectDBMysql(
 			constants.GetMysqlConnectionString(),
 		)

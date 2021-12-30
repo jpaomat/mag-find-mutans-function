@@ -2,14 +2,11 @@ package main
 
 import (
 	"fmt"
-	"log"
 
 	"mag-stadistics-dna-processed-function/src/config/response"
 	stadistics "mag-stadistics-dna-processed-function/src/controllers/stadisticsController"
 
-	"github.com/aws/aws-lambda-go/lambda"
-	"github.com/joho/godotenv"
-)
+	"github.com/aws/aws-lambda-go/lambda")
 
 type Request struct {
 	ID float64 `json:"id"`
@@ -21,10 +18,6 @@ var (
 
 func Handler(request Request) (*response.Response, error) {
 	fmt.Println(request)
-	err := godotenv.Load(".env")
-	if err != nil {
-		log.Fatal(err)
-	}
 
 	resp := stadistics.GetStadisticsDnaProcessed()
 	fmt.Println(resp)

@@ -69,8 +69,9 @@ func (c *Constants) GetMaxDbLifetime() time.Duration {
 }
 
 func GetMysqlConnectionString() string {
-	secretCredentialsDb, err := utils.GetSecretValue(os.Getenv("SECRETDBNAME"))
+	secretCredentialsDb, err := utils.GetSecretValue("/rds_db/mysql")
 	credentialsDb := utils.SecretManagerDB(secretCredentialsDb)
+	fmt.Println(credentialsDb)
 	connectionString := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s", credentialsDb.UserName, credentialsDb.Password, credentialsDb.Hostname, credentialsDb.Port, credentialsDb.Database)
 	if err != nil {
 		panic(err)
