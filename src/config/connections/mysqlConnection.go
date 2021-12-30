@@ -12,7 +12,7 @@ const (
 	errDefault = "Error with the connection"
 )
 
-type MySQLConnection struct {
+type MySQLConnection struct { // info para lograr la conexion
 	connectionString string
 	maxOpenDbConn    int
 	maxIdleDbConn    time.Duration
