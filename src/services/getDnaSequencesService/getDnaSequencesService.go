@@ -18,12 +18,15 @@ var (
 )
 
 func GetDataDnaSequences() (*sql.Rows, *errormanager.ErrorManager) {
-	connectionDb, errDto := connections.GetConnectDBMysql(
-			constants.GetMysqlConnectionString(),
-		)
-		if errDto != nil {
-			return nil, errDto
-		}
+	connectionDb, errDto := connections.BuildMySQLConnection(
+		constants.GetMysqlConnectionString(),
+		constants.GetMaxDbLifetime(),
+		constants.GetMaxOpenDbConn(),
+		constants.GetMasIdleDbConn(),
+	).GetConnectDBMysql()
+	if errDto != nil {
+		return nil, errDto
+	}
 	defer connectionDb.Close()
 
 	rows, err := connectionDb.Query("SELECT MUTANT FROM mutants_general.DNA_VERIFICATION_MUTANTS")
