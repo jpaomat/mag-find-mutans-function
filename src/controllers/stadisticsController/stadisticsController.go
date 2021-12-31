@@ -32,7 +32,7 @@ func GetStadisticsDnaProcessed() (*response.BodyStruct, *errormanager.ErrorManag
 	// if err != nil {
 	// 	panic(err.Error())
 	// }
-	rows, err := getDnasequencesService.GetDataDnaSequences()
+	rows, err := getdnasequenceservice.GetDataDnaSequences()
 	if err != nil {
 		panic(err)
 	}
