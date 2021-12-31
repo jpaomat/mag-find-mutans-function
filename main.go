@@ -24,9 +24,9 @@ func Handler(request events.APIGatewayProxyRequest) (*response.Response, error) 
 		Message:    "OK",
 		StatusCode: 200,
 		Body: response.BodyStruct{
-			Count_mutant_dna: 0,
-			Count_human_dna:  0,
-			Ratio:            0,
+			Count_mutant_dna: respStadistics.Count_mutant_dna,
+			Count_human_dna: respStadistics.Count_human_dna,
+			Ratio: respStadistics.Ratio,
 		},
 	}, nil
 }

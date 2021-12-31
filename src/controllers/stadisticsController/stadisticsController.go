@@ -5,33 +5,17 @@ import (
 	"fmt"
 	"mag-stadistics-dna-processed-function/src/config/connections"
 	"mag-stadistics-dna-processed-function/src/config/constants"
+	"mag-stadistics-dna-processed-function/src/config/response"
 	errormanager "mag-stadistics-dna-processed-function/src/config/errorManager"
-	"strconv"
-	"time"
 )
 
-type proProjectRepoImpl struct {
-	constants constants.Constants
-	// sqlTool   *sqlTools.SqlTool
+type resultStadistics struct {
+    count_mutant_dna int
+	count_human_dna int
+	ratio float64
 }
 
-var (
-	buildMySQLConnection = connections.BuildMySQLConnection
-)
-
-var (
-	castToInt     = strconv.Atoi
-	parseDuration = time.ParseDuration
-)
-
-type Dnas struct {
-    ID   int
-    Dna string
-    Mutant string
-}
-
-
-func GetStadisticsDnaProcessed() string {
+func GetStadisticsDnaProcessed() *response.BodyStruct {
 	// // clsConnectiob := db.NewValue("/rds_db/mysql")
 	connectionDb, errDto := loadConnection()
 	if errDto != nil {
@@ -63,7 +47,11 @@ func GetStadisticsDnaProcessed() string {
 		}
     }
 	err = rows.Err()
-	return fmt.Sprintf("resut mutant %d- result human %d", count_mutant_dna, count_human_dna)
+	return &response.BodyStruct{
+		Count_mutant_dna: count_mutant_dna,
+		Count_human_dna: count_human_dna,
+		Ratio: 0.0,
+	}
 }
 
 func loadConnection() (*sql.DB, *errormanager.ErrorManager) {
