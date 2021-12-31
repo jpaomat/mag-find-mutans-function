@@ -9,12 +9,6 @@ import (
 	errormanager "mag-stadistics-dna-processed-function/src/config/errorManager"
 )
 
-type resultStadistics struct {
-    count_mutant_dna int
-	count_human_dna int
-	ratio float64
-}
-
 func GetStadisticsDnaProcessed() *response.BodyStruct {
 	// // clsConnectiob := db.NewValue("/rds_db/mysql")
 	connectionDb, errDto := loadConnection()
@@ -51,7 +45,7 @@ func GetStadisticsDnaProcessed() *response.BodyStruct {
 	return &response.BodyStruct{
 		Count_mutant_dna: count_mutant_dna,
 		Count_human_dna: count_human_dna,
-		Ratio: ratio,
+		Ratio: Sprintf("%.1f"),
 	}
 }
 

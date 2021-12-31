@@ -3,7 +3,7 @@ package response
 type BodyStruct struct {
 	Count_mutant_dna int     `json:"count_mutant_dna"`
 	Count_human_dna  int     `json:"count_human_dna"`
-	Ratio            float64 `json:"ratio"`
+	Ratio            string `json:"ratio"`
 }
 
 type Response struct {
