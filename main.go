@@ -7,7 +7,6 @@ import (
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
 	"mag-stadistics-dna-processed-function/src/utils"
-	errormanager "mag-stadistics-dna-processed-function/src/config/errorManager"
 )
 
 type Request struct {}
@@ -23,12 +22,17 @@ var (
 	logger         = utils.Logger
 )
 
-func Handler(request events.APIGatewayProxyRequest) (*response.Response, *errormanager.ErrorManager) {
+func Handler(request events.APIGatewayProxyRequest) (*response.Response) {
 	fmt.Println("Log 1 (CL 18-main) -> Input data to mag-stadistics-dna-proccesed-function lambda: ", request)
 
 	respStadistics, errStadistics:= stadistics.GetStadisticsDnaProcessed()
 	if errStadistics != nil {
-		return nil, errStadistics
+		return &response.Response{
+			Message:    errStadistics.Message,
+			StatusCode: errStadistics.Status,
+			Body: response.BodyStruct{
+			},
+		}
 	}
 
 	fmt.Println("Log 7 (CL 22-main) -> Response to mag-stadistics-dna-proccesed-function lambda: ", respStadistics)
@@ -40,7 +44,7 @@ func Handler(request events.APIGatewayProxyRequest) (*response.Response, *errorm
 			Count_human_dna: respStadistics.Count_human_dna,
 			Ratio: respStadistics.Ratio,
 		},
-	}, nil
+	}
 }
 
 func main() {
