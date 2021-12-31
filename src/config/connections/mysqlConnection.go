@@ -35,7 +35,7 @@ func BuildMySQLConnection(connectionString string, maxOpenDbConn int, maxIdleDbC
 }
 
 func (mConn *MySQLConnection) GetConnectDBMysql() (*sql.DB, *errormanager.ErrorManager) {
-	if connectionString == "" {
+	if mConn.connectionString == "" {
 		return nil, logger("Missing the string connection", errDefault, http.StatusInternalServerError, "")
 	}
 	db, err := openConnection("mysql", mConn.connectionString)
@@ -44,6 +44,6 @@ func (mConn *MySQLConnection) GetConnectDBMysql() (*sql.DB, *errormanager.ErrorM
 	}
 	db.SetConnMaxLifetime(mConn.maxDbLifeTime)
 	db.SetMaxOpenConns(mConn.maxOpenDbConn)
-	db.SetMaxIdleConns(McConn.maxIdleConns)
+	db.SetMaxIdleConns(mConn.maxIdleConns)
 	return db, nil
 }
