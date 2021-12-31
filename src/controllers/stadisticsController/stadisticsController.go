@@ -27,7 +27,6 @@ func GetStadisticsDnaProcessed() (*response.BodyStruct, *errormanager.ErrorManag
 	for rows.Next() {
 		var mutant string
         errorScan := rows.Scan(&mutant)
-		fmt.Println("...", mutant)
         if errorScan != nil {
 			return nil, logger("Error to get data DB", errDefault, http.StatusInternalServerError, errorScan.Error())
         }
