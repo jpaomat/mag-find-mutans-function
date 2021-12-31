@@ -7,32 +7,43 @@ import (
 	"mag-stadistics-dna-processed-function/src/config/constants"
 	"mag-stadistics-dna-processed-function/src/config/response"
 	errormanager "mag-stadistics-dna-processed-function/src/config/errorManager"
+	"mag-stadistics-dna-processed-function/src/utils"
+	"net/http"
 )
 
-func GetStadisticsDnaProcessed() *response.BodyStruct {
-	// // clsConnectiob := db.NewValue("/rds_db/mysql")
-	connectionDb, errDto := loadConnection()
-	if errDto != nil {
-		panic(errDto)
-	}
-	defer connectionDb.Close()
-	fmt.Println("connection DB", connectionDb)
+const (
+	errDefault = "Error with the connection"
+)
 
-	rows, err := connectionDb.Query("SELECT MUTANT FROM mutants_general.DNA_VERIFICATION_MUTANTS")
-	// if there is an error inserting, handle it
+var (
+	logger         = utils.Logger
+)
+
+func GetStadisticsDnaProcessed() (*response.BodyStruct, *errormanager.ErrorManager) {
+	// connectionDb, errDto := loadConnection()
+	// if errDto != nil {
+	// 	panic(errDto)
+	// }
+	// defer connectionDb.Close()
+
+	// rows, err := connectionDb.Query("SELECT MUTANT FROM mutants_general.DNA_VERIFICATION_MUTANTS")
+	// // if there is an error inserting, handle it
+	// if err != nil {
+	// 	panic(err.Error())
+	// }
+	rows, err := getDataDnaSequences()
 	if err != nil {
-		panic(err.Error())
+		panic(err)
 	}
-	fmt.Println("Data table", rows)
 	// be careful deferring Queries if you are using transactions
 	defer rows.Close()
 	count_mutant_dna:=0
 	count_human_dna:=0
 	for rows.Next() {
 		var mutant string
-        err = rows.Scan(&mutant)
-        if err != nil {
-			panic(err.Error()) // proper error handling instead of panic in your app
+        errorScan := rows.Scan(&mutant)
+        if errorScan != nil {
+			return nil, logger("Error to get data DB", errDefault, http.StatusInternalServerError, errorScan.Error())
         }
 		if mutant == "1" {
 			count_mutant_dna ++
@@ -40,17 +51,14 @@ func GetStadisticsDnaProcessed() *response.BodyStruct {
 		count_human_dna++
     }
 	ratio := float64(count_mutant_dna)/float64(count_human_dna)
-	// ratio = (count_human_dna.compareTo(BigDecimal.ZERO) != 0) ? count_mutant_dna.divide(count_human_dna, 2, RoundingMode.UNNECESSARY) : new BigDecimal("0.00");
-	err = rows.Err()
 	return &response.BodyStruct{
 		Count_mutant_dna: count_mutant_dna,
 		Count_human_dna: count_human_dna,
 		Ratio: fmt.Sprintf("%.1f", ratio),
-	}
+	}, nil
 }
 
 func loadConnection() (*sql.DB, *errormanager.ErrorManager) {
-	fmt.Println("loadconnection")
 	connectionDb, errDto := connections.GetConnectDBMysql(
 			constants.GetMysqlConnectionString(),
 		)
@@ -58,4 +66,23 @@ func loadConnection() (*sql.DB, *errormanager.ErrorManager) {
 			panic(errDto)
 		}
 	return connectionDb, errDto
+}
+
+func getDataDnaSequences() (*sql.Rows, *errormanager.ErrorManager) {
+	connectionDb, errDto := connections.GetConnectDBMysql(
+			constants.GetMysqlConnectionString(),
+		)
+	if errDto != nil {
+		panic(errDto)
+	}
+	defer connectionDb.Close()
+
+	rows, err := connectionDb.Query("SELECT MUTANT FROM mutants_general.DNA_VERIFICATION_MUTANTS")
+	// if there is an error inserting, handle it
+	if err != nil {
+		return nil, logger("Error to get data DB", errDefault, http.StatusInternalServerError, err.Error())
+	}
+	// be careful deferring Queries if you are using transactions
+	defer rows.Close()
+	return rows, nil
 }
