@@ -42,15 +42,16 @@ func GetStadisticsDnaProcessed() *response.BodyStruct {
         }
 		if mutant == "1" {
 			count_mutant_dna ++
-		} else {
-			count_human_dna++
 		}
+		count_human_dna++
     }
+	ratio := float64(count_mutant_dna)/float64(count_human_dna)
+	// ratio = (count_human_dna.compareTo(BigDecimal.ZERO) != 0) ? count_mutant_dna.divide(count_human_dna, 2, RoundingMode.UNNECESSARY) : new BigDecimal("0.00");
 	err = rows.Err()
 	return &response.BodyStruct{
 		Count_mutant_dna: count_mutant_dna,
 		Count_human_dna: count_human_dna,
-		Ratio: 0.0,
+		Ratio: ratio,
 	}
 }
 
