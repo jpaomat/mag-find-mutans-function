@@ -24,6 +24,12 @@ var (
 	parseDuration = time.ParseDuration
 )
 
+type Dnas struct {
+    ID   int    `json:"id"`
+    Dna string `json:"dna"`
+    Mutant string `json:"mutant"`
+}
+
 
 func GetStadisticsDnaProcessed() string {
 	// // clsConnectiob := db.NewValue("/rds_db/mysql")
@@ -34,7 +40,7 @@ func GetStadisticsDnaProcessed() string {
 	defer connectionDb.Close()
 	fmt.Println("connection DB", connectionDb)
 
-	rows, err := connectionDb.Query("SELECT * FROM mutants_general.DNA_VERIFICATION_MUTANTS")
+	rows, err := connectionDb.Query("SELECT ID, DNA, MUTANT FROM mutants_general.DNA_VERIFICATION_MUTANTS")
 	// if there is an error inserting, handle it
 	if err != nil {
 		panic(err.Error())
@@ -43,11 +49,12 @@ func GetStadisticsDnaProcessed() string {
 	// be careful deferring Queries if you are using transactions
 	defer rows.Close()
 	for rows.Next() {
-        var ID int
-        var Dna string
-		var Mutant string
-        err = rows.Scan(&ID, &Dna, &Mutant,)
-		fmt.Println("Select ejecutado", &ID, &Dna, &Mutant)
+        var dnas Dnas
+        err = rows.Scan(&dnas.ID, &dnas.Dna, &dnas.Mutant)
+        if err != nil {
+			panic(err.Error()) // proper error handling instead of panic in your app
+        }
+		fmt.Println("Select ejecutado", &dnas.ID, &dnas.Dna, &dnas.Mutant)
     }
 	err = rows.Err()
 	return "Select ejecutado"
