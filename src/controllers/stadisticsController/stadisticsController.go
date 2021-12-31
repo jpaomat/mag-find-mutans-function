@@ -6,7 +6,7 @@ import (
 	// "mag-stadistics-dna-processed-function/src/config/constants"
 	"fmt"
 	"mag-stadistics-dna-processed-function/src/config/response"
-	"mag-stadistics-dna-processed-function/src/services/getDnasequencesService"
+	"mag-stadistics-dna-processed-function/src/services/getDnaSequencesService"
 	errormanager "mag-stadistics-dna-processed-function/src/config/errorManager"
 	"mag-stadistics-dna-processed-function/src/utils"
 	"net/http"
@@ -32,7 +32,7 @@ func GetStadisticsDnaProcessed() (*response.BodyStruct, *errormanager.ErrorManag
 	// if err != nil {
 	// 	panic(err.Error())
 	// }
-	rows, err := getdnasequenceservice.GetDataDnaSequences()
+	rows, err := getDnaSequencesService.GetDataDnaSequences()
 	if err != nil {
 		panic(err)
 	}

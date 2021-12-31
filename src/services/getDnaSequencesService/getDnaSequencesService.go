@@ -1,4 +1,4 @@
-package getdnasequenceservice
+package getDnaSequencesService
 
 import (
 	"database/sql"
