@@ -40,7 +40,7 @@ func GetStadisticsDnaProcessed() string {
 	defer connectionDb.Close()
 	fmt.Println("connection DB", connectionDb)
 
-	rows, err := connectionDb.Query("SELECT ID, DNA, MUTANT FROM mutants_general.DNA_VERIFICATION_MUTANTS")
+	rows, err := connectionDb.Query("SELECT MUTANT FROM mutants_general.DNA_VERIFICATION_MUTANTS")
 	// if there is an error inserting, handle it
 	if err != nil {
 		panic(err.Error())
@@ -48,29 +48,20 @@ func GetStadisticsDnaProcessed() string {
 	fmt.Println("Data table", rows)
 	// be careful deferring Queries if you are using transactions
 	defer rows.Close()
-	dnas := Dnas{}
-	arrayDnas := []Dnas{}
 	count_mutant_dna:=0
 	count_human_dna:=0
 	for rows.Next() {
-		var id int
-		var dna, mutant string
-        err = rows.Scan(&id, &dna, &mutant)
+		var mutant string
+        err = rows.Scan(&mutant)
         if err != nil {
 			panic(err.Error()) // proper error handling instead of panic in your app
         }
-		fmt.Println("Select dnasss",dna,mutant)
-		dnas.ID = id
-		dnas.Dna = dna
-		dnas.Mutant = mutant
 		if mutant == "1" {
 			count_mutant_dna ++
 		} else {
 			count_human_dna++
 		}
-		arrayDnas = append(arrayDnas, dnas)
     }
-	fmt.Println("Select ejecutado",arrayDnas)
 	err = rows.Err()
 	return fmt.Sprintf("resut mutant %d- result human %d", count_mutant_dna, count_human_dna)
 }
