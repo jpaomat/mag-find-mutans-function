@@ -1,11 +1,12 @@
 package stadisticscontroller
 
 import (
-	"database/sql"
+	// "database/sql"
+	// "mag-stadistics-dna-processed-function/src/config/connections"
+	// "mag-stadistics-dna-processed-function/src/config/constants"
 	"fmt"
-	"mag-stadistics-dna-processed-function/src/config/connections"
-	"mag-stadistics-dna-processed-function/src/config/constants"
 	"mag-stadistics-dna-processed-function/src/config/response"
+	"mag-stadistics-dna-processed-function/src/services/getDnasequencesService"
 	errormanager "mag-stadistics-dna-processed-function/src/config/errorManager"
 	"mag-stadistics-dna-processed-function/src/utils"
 	"net/http"
@@ -31,7 +32,7 @@ func GetStadisticsDnaProcessed() (*response.BodyStruct, *errormanager.ErrorManag
 	// if err != nil {
 	// 	panic(err.Error())
 	// }
-	rows, err := getDataDnaSequences()
+	rows, err := getDnasequencesService.GetDataDnaSequences()
 	if err != nil {
 		panic(err)
 	}
@@ -58,31 +59,31 @@ func GetStadisticsDnaProcessed() (*response.BodyStruct, *errormanager.ErrorManag
 	}, nil
 }
 
-func loadConnection() (*sql.DB, *errormanager.ErrorManager) {
-	connectionDb, errDto := connections.GetConnectDBMysql(
-			constants.GetMysqlConnectionString(),
-		)
-		if errDto != nil {
-			panic(errDto)
-		}
-	return connectionDb, errDto
-}
+// func loadConnection() (*sql.DB, *errormanager.ErrorManager) {
+// 	connectionDb, errDto := connections.GetConnectDBMysql(
+// 			constants.GetMysqlConnectionString(),
+// 		)
+// 		if errDto != nil {
+// 			panic(errDto)
+// 		}
+// 	return connectionDb, errDto
+// }
 
-func getDataDnaSequences() (*sql.Rows, *errormanager.ErrorManager) {
-	connectionDb, errDto := connections.GetConnectDBMysql(
-			constants.GetMysqlConnectionString(),
-		)
-	if errDto != nil {
-		panic(errDto)
-	}
-	defer connectionDb.Close()
+// func getDataDnaSequences() (*sql.Rows, *errormanager.ErrorManager) {
+// 	connectionDb, errDto := connections.GetConnectDBMysql(
+// 			constants.GetMysqlConnectionString(),
+// 		)
+// 	if errDto != nil {
+// 		panic(errDto)
+// 	}
+// 	defer connectionDb.Close()
 
-	rows, err := connectionDb.Query("SELECT MUTANT FROM mutants_general.DNA_VERIFICATION_MUTANTS")
-	// if there is an error inserting, handle it
-	if err != nil {
-		return nil, logger("Error to get data DB", errDefault, http.StatusInternalServerError, err.Error())
-	}
-	// be careful deferring Queries if you are using transactions
-	defer rows.Close()
-	return rows, nil
-}
+// 	rows, err := connectionDb.Query("SELECT MUTANT FROM mutants_general.DNA_VERIFICATION_MUTANTS")
+// 	// if there is an error inserting, handle it
+// 	if err != nil {
+// 		return nil, logger("Error to get data DB", errDefault, http.StatusInternalServerError, err.Error())
+// 	}
+// 	// be careful deferring Queries if you are using transactions
+// 	defer rows.Close()
+// 	return rows, nil
+// }
