@@ -1,9 +1,6 @@
 package stadisticscontroller
 
 import (
-	// "database/sql"
-	// "mag-stadistics-dna-processed-function/src/config/connections"
-	// "mag-stadistics-dna-processed-function/src/config/constants"
 	"fmt"
 	"mag-stadistics-dna-processed-function/src/config/response"
 	"mag-stadistics-dna-processed-function/src/services/getDnaSequencesService"
@@ -21,22 +18,10 @@ var (
 )
 
 func GetStadisticsDnaProcessed() (*response.BodyStruct, *errormanager.ErrorManager) {
-	// connectionDb, errDto := loadConnection()
-	// if errDto != nil {
-	// 	panic(errDto)
-	// }
-	// defer connectionDb.Close()
-
-	// rows, err := connectionDb.Query("SELECT MUTANT FROM mutants_general.DNA_VERIFICATION_MUTANTS")
-	// // if there is an error inserting, handle it
-	// if err != nil {
-	// 	panic(err.Error())
-	// }
 	rows, errData := getDnaSequencesService.GetDataDnaSequences()
 	if errData != nil {
 		return nil, errData
 	}
-	// be careful deferring Queries if you are using transactions
 	count_mutant_dna:=0
 	count_human_dna:=0
 	for rows.Next() {
@@ -60,31 +45,3 @@ func GetStadisticsDnaProcessed() (*response.BodyStruct, *errormanager.ErrorManag
 	}, nil
 }
 
-// func loadConnection() (*sql.DB, *errormanager.ErrorManager) {
-// 	connectionDb, errDto := connections.GetConnectDBMysql(
-// 			constants.GetMysqlConnectionString(),
-// 		)
-// 		if errDto != nil {
-// 			panic(errDto)
-// 		}
-// 	return connectionDb, errDto
-// }
-
-// func getDataDnaSequences() (*sql.Rows, *errormanager.ErrorManager) {
-// 	connectionDb, errDto := connections.GetConnectDBMysql(
-// 			constants.GetMysqlConnectionString(),
-// 		)
-// 	if errDto != nil {
-// 		panic(errDto)
-// 	}
-// 	defer connectionDb.Close()
-
-// 	rows, err := connectionDb.Query("SELECT MUTANT FROM mutants_general.DNA_VERIFICATION_MUTANTS")
-// 	// if there is an error inserting, handle it
-// 	if err != nil {
-// 		return nil, logger("Error to get data DB", errDefault, http.StatusInternalServerError, err.Error())
-// 	}
-// 	// be careful deferring Queries if you are using transactions
-// 	defer rows.Close()
-// 	return rows, nil
-// }
