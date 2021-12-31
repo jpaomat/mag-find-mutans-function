@@ -26,14 +26,15 @@ func Handler(request events.APIGatewayProxyRequest) (*response.Response) {
 	fmt.Println("Log 1 (CL 18-main) -> Input data to mag-stadistics-dna-proccesed-function lambda: ", request)
 
 	respStadistics, errStadistics:= stadistics.GetStadisticsDnaProcessed()
-	if errStadistics != nil {
-		return &response.Response{
-			Message:    errStadistics.Message,
-			StatusCode: errStadistics.Status,
-			Body: response.BodyStruct{
-			},
-		}
-	}
+	fmt.Println("Log", errStadistics)
+	// if errStadistics != nil {
+	// 	return &response.Response{
+	// 		Message:    errStadistics.Message,
+	// 		StatusCode: errStadistics.Status,
+	// 		Body: response.BodyStruct{
+	// 		},
+	// 	}
+	// }
 
 	fmt.Println("Log 7 (CL 22-main) -> Response to mag-stadistics-dna-proccesed-function lambda: ", respStadistics)
 	return &response.Response{
