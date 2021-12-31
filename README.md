@@ -14,10 +14,6 @@ En sonarCloud puede ver el reporte que se genera al análizar la calidad del có
 
 [sonar-cloud-mag-stadistics-dna-processed-function](https://sonarcloud.io/summary/new_code?branch=feature%2Frefactor&id=jpaomat_mag-stadistics-dna-processed-function)
 
-## Ejecutando linter ⚙️
-
-Para la ejecución del linter para el análisis de la calidad del código use `npm run lint` este le mostrara si hay algún por en la sintaxis del código.
-
 ## Despliegue 📦
 
 Este proyecto solo se puede probar una vez este desplegado en la nube de AWS, para esto solo tiene que subir los cambios que realice al repositorio de GIT con los comandos:
