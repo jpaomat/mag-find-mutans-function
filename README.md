@@ -1,2 +1,2 @@
-# mag-find-mutans-function
-This service is in charge of determining if a person is a mutant by validating their DNA sequence
+# mag-stadistics-dna-proccesed-function
+This service is responsible for generating the statistics of all the DNA sequences processed to determine if a human is a mutant

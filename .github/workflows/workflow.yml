@@ -4,7 +4,7 @@ on:
     branches: [main, feature/*]
 env:
   ### VARIABLES GENERALES ###
-  project_name: "mag-find-mutants-function"
+  project_name: "mag-stadistics-dna-processed-function"
   team: "mag"
   language: "go"
   handler: main
@@ -57,11 +57,6 @@ jobs:
           go tool cover -html=cover.out -o index.html
           mv cover.out coverage
           mv index.html coverage
-      - name: Persist Data
-        uses: actions/upload-artifact@v2
-        with:
-          name: coverage
-          path: coverage
 
   sonarcloud:
     runs-on: ubuntu-20.04
@@ -69,11 +64,6 @@ jobs:
     name: SonarCloud
     steps:
       - uses: actions/checkout@v2
-      - name: Restore Data
-        uses: actions/download-artifact@v2
-        with:
-          name: coverage
-          path: coverage
       - name: Current Branch
         shell: bash
         id: long-lived-branch
@@ -93,8 +83,8 @@ jobs:
 
   deploy-lambda:
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/qa'
-    needs: [sonarcloud]
+    # if: github.ref == 'refs/heads/qa'
+    needs: [build]
     steps:
       - uses: actions/checkout@v2
       - name: Configure AWS Credentials
