@@ -32,9 +32,9 @@ func GetStadisticsDnaProcessed() (*response.BodyStruct, *errormanager.ErrorManag
 	// if err != nil {
 	// 	panic(err.Error())
 	// }
-	rows, err := getDnaSequencesService.GetDataDnaSequences()
-	if err != nil {
-		panic(err)
+	rows, errData := getDnaSequencesService.GetDataDnaSequences()
+	if errData != nil {
+		return nil, errData
 	}
 	// be careful deferring Queries if you are using transactions
 	defer rows.Close()

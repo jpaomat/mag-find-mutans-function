@@ -6,6 +6,8 @@ import (
 	stadistics "mag-stadistics-dna-processed-function/src/controllers/stadisticsController"
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
+	"mag-stadistics-dna-processed-function/src/utils"
+	errormanager "mag-stadistics-dna-processed-function/src/config/errorManager"
 )
 
 type Request struct {}
@@ -13,11 +15,21 @@ type Request struct {}
 var (
 	start = lambda.Start
 )
+const (
+	errDefault = "Error with the connection"
+)
 
-func Handler(request events.APIGatewayProxyRequest) (*response.Response, error) {
+var (
+	logger         = utils.Logger
+)
+
+func Handler(request events.APIGatewayProxyRequest) (*response.Response, *errormanager.ErrorManager) {
 	fmt.Println("Log 1 (CL 18-main) -> Input data to mag-stadistics-dna-proccesed-function lambda: ", request)
 
-	respStadistics := stadistics.GetStadisticsDnaProcessed()
+	respStadistics, errStadistics:= stadistics.GetStadisticsDnaProcessed()
+	if errStadistics != nil {
+		return nil, errStadistics
+	}
 
 	fmt.Println("Log 7 (CL 22-main) -> Response to mag-stadistics-dna-proccesed-function lambda: ", respStadistics)
 	return &response.Response{
