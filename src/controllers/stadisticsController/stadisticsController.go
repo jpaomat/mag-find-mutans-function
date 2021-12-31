@@ -45,7 +45,7 @@ func GetStadisticsDnaProcessed() *response.BodyStruct {
 	return &response.BodyStruct{
 		Count_mutant_dna: count_mutant_dna,
 		Count_human_dna: count_human_dna,
-		Ratio: Sprintf("%.1f"),
+		Ratio: fmt.Sprintf("%.1f", ratio),
 	}
 }
 
