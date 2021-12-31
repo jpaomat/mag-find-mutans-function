@@ -37,7 +37,6 @@ func GetStadisticsDnaProcessed() (*response.BodyStruct, *errormanager.ErrorManag
 		return nil, errData
 	}
 	// be careful deferring Queries if you are using transactions
-	defer rows.Close()
 	count_mutant_dna:=0
 	count_human_dna:=0
 	for rows.Next() {
@@ -53,6 +52,7 @@ func GetStadisticsDnaProcessed() (*response.BodyStruct, *errormanager.ErrorManag
 		count_human_dna++
     }
 	ratio := float64(count_mutant_dna)/float64(count_human_dna)
+	defer rows.Close()
 	return &response.BodyStruct{
 		Count_mutant_dna: count_mutant_dna,
 		Count_human_dna: count_human_dna,

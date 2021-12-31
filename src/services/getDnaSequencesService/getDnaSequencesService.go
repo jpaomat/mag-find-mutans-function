@@ -27,11 +27,8 @@ func GetDataDnaSequences() (*sql.Rows, *errormanager.ErrorManager) {
 	defer connectionDb.Close()
 
 	rows, err := connectionDb.Query("SELECT MUTANT FROM mutants_general.DNA_VERIFICATION_MUTANTS")
-	// if there is an error inserting, handle it
 	if err != nil {
 		return nil, logger("Error to get data DB", errDefault, http.StatusInternalServerError, err.Error())
 	}
-	// be careful deferring Queries if you are using transactions
-	defer rows.Close()
 	return rows, nil
 }
