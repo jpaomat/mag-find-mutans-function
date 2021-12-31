@@ -44,6 +44,6 @@ func (mConn *MySQLConnection) GetConnectDBMysql() (*sql.DB, *errormanager.ErrorM
 	}
 	db.SetConnMaxLifetime(mConn.maxDbLifeTime)
 	db.SetMaxOpenConns(mConn.maxOpenDbConn)
-	db.SetMaxIdleConns(mConn.maxIdleConns)
+	db.SetMaxIdleConns(mConn.maxIdleDbConn)
 	return db, nil
 }
