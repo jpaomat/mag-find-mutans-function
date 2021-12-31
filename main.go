@@ -22,7 +22,7 @@ var (
 	logger         = utils.Logger
 )
 
-func Handler(request events.APIGatewayProxyRequest) (*response.Response) {
+func Handler(request events.APIGatewayProxyRequest) (*response.Response, error) {
 	fmt.Println("Log 1 (CL 18-main) -> Input data to mag-stadistics-dna-proccesed-function lambda: ", request)
 
 	respStadistics, errStadistics:= stadistics.GetStadisticsDnaProcessed()
@@ -45,7 +45,7 @@ func Handler(request events.APIGatewayProxyRequest) (*response.Response) {
 			Count_human_dna: respStadistics.Count_human_dna,
 			Ratio: respStadistics.Ratio,
 		},
-	}
+	}, nil
 }
 
 func main() {
