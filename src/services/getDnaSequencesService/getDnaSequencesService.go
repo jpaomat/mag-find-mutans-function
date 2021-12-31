@@ -20,9 +20,6 @@ var (
 func GetDataDnaSequences() (*sql.Rows, *errormanager.ErrorManager) {
 	connectionDb, errDto := connections.BuildMySQLConnection(
 		constants.GetMysqlConnectionString(),
-		constants.GetMaxDbLifetime(),
-		constants.GetMaxOpenDbConn(),
-		constants.GetMasIdleDbConn(),
 	).GetConnectDBMysql()
 	if errDto != nil {
 		return nil, errDto

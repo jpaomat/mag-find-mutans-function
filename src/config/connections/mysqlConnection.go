@@ -6,7 +6,6 @@ import (
 	errormanager "mag-stadistics-dna-processed-function/src/config/errorManager"
 	"mag-stadistics-dna-processed-function/src/utils"
 	"net/http"
-	"time"
 )
 
 const (
@@ -22,7 +21,7 @@ var (
 	logger         = utils.Logger
 )
 
-func BuildMySQLConnection(connectionString string, maxOpenDbConn int, maxIdleDbConn time.Duration, maxDbLifeTime time.Duration) *MySQLConnection {
+func BuildMySQLConnection(connectionString string) *MySQLConnection {
 	return &MySQLConnection{
 		connectionString: connectionString,
 	}
