@@ -50,6 +50,8 @@ func GetStadisticsDnaProcessed() string {
 	defer rows.Close()
 	dnas := Dnas{}
 	arrayDnas := []Dnas{}
+	count_mutant_dna:=0
+	count_human_dna:=0
 	for rows.Next() {
 		var id int
 		var dna, mutant string
@@ -61,11 +63,16 @@ func GetStadisticsDnaProcessed() string {
 		dnas.ID = id
 		dnas.Dna = dna
 		dnas.Mutant = mutant
+		if mutant == "1" {
+			count_mutant_dna ++
+		} else {
+			count_human_dna++
+		}
 		arrayDnas = append(arrayDnas, dnas)
     }
 	fmt.Println("Select ejecutado",arrayDnas)
 	err = rows.Err()
-	return "Select ejecutado"
+	return fmt.Sprintf("resut mutant %d- result human %d", count_mutant_dna, count_human_dna)
 }
 
 func loadConnection() (*sql.DB, *errormanager.ErrorManager) {
