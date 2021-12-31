@@ -47,7 +47,7 @@ func GetStadisticsDnaProcessed() string {
         var Dna string
 		var Mutant string
         err = rows.Scan(&ID, &Dna, &Mutant,)
-		fmt.Println("Select ejecutado", ID, Dna, Mutant)
+		fmt.Println("Select ejecutado", &ID, &Dna, &Mutant)
     }
 	err = rows.Err()
 	return "Select ejecutado"
