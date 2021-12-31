@@ -22,8 +22,8 @@ func GetStadisticsDnaProcessed() (*response.BodyStruct, *errormanager.ErrorManag
 	if errData != nil {
 		return nil, errData
 	}
-	count_mutant_dna:=0
-	count_human_dna:=0
+	countMutantDna:=0
+	countHumanDna:=0
 	for rows.Next() {
 		var mutant string
         errorScan := rows.Scan(&mutant)
@@ -31,15 +31,15 @@ func GetStadisticsDnaProcessed() (*response.BodyStruct, *errormanager.ErrorManag
 			return nil, logger("Error to get data DB", errDefault, http.StatusInternalServerError, errorScan.Error())
         }
 		if mutant == "1" {
-			count_mutant_dna ++
+			countMutantDna ++
 		}
-		count_human_dna++
+		countHumanDna++
     }
-	ratio := float64(count_mutant_dna)/float64(count_human_dna)
+	ratio := float64(countMutantDna)/float64(countHumanDna)
 	defer rows.Close()
 	return &response.BodyStruct{
-		Count_mutant_dna: count_mutant_dna,
-		Count_human_dna: count_human_dna,
+		Count_mutant_dna: countMutantDna,
+		Count_human_dna: countHumanDna,
 		Ratio: fmt.Sprintf("%.1f", ratio),
 	}, nil
 }
