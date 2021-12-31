@@ -2,26 +2,24 @@ package main
 
 import (
 	"fmt"
-
 	"mag-stadistics-dna-processed-function/src/config/response"
 	stadistics "mag-stadistics-dna-processed-function/src/controllers/stadisticsController"
+	"github.com/aws/aws-lambda-go/events"
+	"github.com/aws/aws-lambda-go/lambda"
+)
 
-	"github.com/aws/aws-lambda-go/lambda")
-
-type Request struct {
-	ID float64 `json:"id"`
-}
+type Request struct {}
 
 var (
 	start = lambda.Start
 )
 
-func Handler(request Request) (*response.Response, error) {
-	fmt.Println(request)
+func Handler(request events.APIGatewayProxyRequest) (*response.Response, error) {
+	fmt.Println("Log 1 (CL 18-main) -> Input data to mag-stadistics-dna-proccesed-function lambda: ", request)
 
-	resp := stadistics.GetStadisticsDnaProcessed()
-	fmt.Println(resp)
-	
+	respStadistics := stadistics.GetStadisticsDnaProcessed()
+
+	fmt.Println("Log 7 (CL 22-main) -> Response to mag-stadistics-dna-proccesed-function lambda: ", respStadistics)
 	return &response.Response{
 		Message:    "OK",
 		StatusCode: 200,

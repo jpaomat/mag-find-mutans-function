@@ -24,9 +24,9 @@ var (
 	parseDuration = time.ParseDuration
 )
 
+
 func GetStadisticsDnaProcessed() string {
 	// // clsConnectiob := db.NewValue("/rds_db/mysql")
-	// connectionString := constants.GetMysqlConnectionString()
 	connectionDb, errDto := loadConnection()
 	if errDto != nil {
 		panic(errDto)
@@ -34,14 +34,22 @@ func GetStadisticsDnaProcessed() string {
 	defer connectionDb.Close()
 	fmt.Println("connection DB", connectionDb)
 
-	resulSql, err := connectionDb.Query("SELECT * FROM mutants_general.DNA_VERIFICATION_MUTANTS")
+	rows, err := connectionDb.Query("SELECT * FROM mutants_general.DNA_VERIFICATION_MUTANTS")
 	// if there is an error inserting, handle it
 	if err != nil {
 		panic(err.Error())
 	}
-	fmt.Println("Data table", resulSql)
-	defer resulSql.Close()
+	fmt.Println("Data table", rows)
 	// be careful deferring Queries if you are using transactions
+	defer rows.Close()
+	for rows.Next() {
+        var ID int
+        var Dna string
+		var Mutant string
+        err = rows.Scan(&ID, &Dna, &Mutant,)
+		fmt.Println("Select ejecutado", ID, Dna, Mutant)
+    }
+	err = rows.Err()
 	return "Select ejecutado"
 }
 
