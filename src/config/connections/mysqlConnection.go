@@ -15,9 +15,6 @@ const (
 
 type MySQLConnection struct { // info para lograr la conexion
 	connectionString string
-	maxOpenDbConn    int
-	maxIdleDbConn    time.Duration
-	maxDbLifeTime    time.Duration
 }
 
 var (
@@ -28,9 +25,6 @@ var (
 func BuildMySQLConnection(connectionString string, maxOpenDbConn int, maxIdleDbConn time.Duration, maxDbLifeTime time.Duration) *MySQLConnection {
 	return &MySQLConnection{
 		connectionString: connectionString,
-		maxOpenDbConn:    maxOpenDbConn,
-		maxIdleDbConn:    maxIdleDbConn,
-		maxDbLifeTime:    maxDbLifeTime * time.Minute,
 	}
 }
 
@@ -42,8 +36,8 @@ func (mConn *MySQLConnection) GetConnectDBMysql() (*sql.DB, *errormanager.ErrorM
 	if err != nil {
 		return nil, logger("Error to connect with DB", errDefault, http.StatusInternalServerError, err.Error())
 	}
-	db.SetConnMaxLifetime(mConn.maxDbLifeTime)
-	db.SetMaxOpenConns(mConn.maxOpenDbConn)
-	db.SetMaxIdleConns(mConn.maxIdleDbConn)
+	db.SetMaxOpenConns(10)
+	db.SetMaxIdleConns(5)
+	db.SetConnMaxLifetime(5)
 	return db, nil
 }
