@@ -57,6 +57,7 @@ func GetStadisticsDnaProcessed() string {
         if err != nil {
 			panic(err.Error()) // proper error handling instead of panic in your app
         }
+		fmt.Println("Select dnasss",dna,mutant)
 		dnas.ID = id
 		dnas.Dna = dna
 		dnas.Mutant = mutant
