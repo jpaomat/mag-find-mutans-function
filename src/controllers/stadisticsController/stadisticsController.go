@@ -25,9 +25,9 @@ var (
 )
 
 type Dnas struct {
-    ID   int    `json:"id"`
-    Dna string `json:"dna"`
-    Mutant string `json:"mutant"`
+    ID   int
+    Dna string
+    Mutant string
 }
 
 
@@ -48,14 +48,21 @@ func GetStadisticsDnaProcessed() string {
 	fmt.Println("Data table", rows)
 	// be careful deferring Queries if you are using transactions
 	defer rows.Close()
+	dnas := Dnas{}
+	arrayDnas := []Dnas{}
 	for rows.Next() {
-        var dnas Dnas
-        err = rows.Scan(&dnas.ID, &dnas.Dna, &dnas.Mutant)
+		var id int
+		var dna, mutant string
+        err = rows.Scan(&id, &dna, &mutant)
         if err != nil {
 			panic(err.Error()) // proper error handling instead of panic in your app
         }
-		fmt.Println("Select ejecutado", &dnas.ID, &dnas.Dna, &dnas.Mutant)
+		dnas.ID = id
+		dnas.Dna = dna
+		dnas.Mutant = mutant
+		arrayDnas = append(arrayDnas, dnas)
     }
+	fmt.Println("Select ejecutado",arrayDnas)
 	err = rows.Err()
 	return "Select ejecutado"
 }
